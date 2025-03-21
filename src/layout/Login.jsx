@@ -1,19 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 const Login = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      navigate("/home");
-    } else {
-      alert("Vui lòng nhập đầy đủ email và mật khẩu.");
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-900 to-black">
       <div className="bg-black p-8 rounded-2xl shadow-2xl w-96">
@@ -58,19 +45,15 @@ const Login = () => {
           </button>
         </div>
 
-        <form className="space-y-4 mb-6" onSubmit={handleLogin}>
+        <form className="space-y-4 mb-6">
           <input
             type="text"
             placeholder="Email hoặc tên người dùng"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <input
             type="password"
             placeholder="Mật khẩu"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 rounded bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
           />
           <button
@@ -82,11 +65,12 @@ const Login = () => {
         </form>
 
         <div className="text-center text-gray-400 text-sm">
+          <span>Bạn chưa có tài khoản? </span>
           <Link
             to="/register"
             className="text-white font-semibold hover:underline"
           >
-            Bạn chưa có tài khoản? Đăng ký Spotify
+            Đăng ký Spotify
           </Link>
         </div>
       </div>
