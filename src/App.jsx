@@ -13,7 +13,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
-import { axiosInstance } from "./lib/axios";
+// import { axiosInstance } from "./lib/axios";
 import MainLayout from "./layout/MainLayout";
 import ChatPage from "./pages/chat/ChatPage";
 
@@ -32,9 +32,8 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/albums/:albumId" element={<AlbumPage />} />
         </Route>
-
-        {/* <Route path="/login" element={<Login />}></Route> */}
 
         <Route
           path="/sso-callback"

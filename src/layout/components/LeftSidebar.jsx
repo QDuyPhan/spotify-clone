@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HomeIcon, Library, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -6,9 +6,16 @@ import { buttonVariants } from "@/components/ui/button";
 import { SignedIn } from "@clerk/clerk-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import PlaylistSkeleton from "@/components/skeletons/PlaylistSkeleton";
+import { useMusicStore } from "@/stores/useMusicStore";
 
 const LeftSidebar = () => {
-  const isLoading = false;
+  // const isLoading = false;
+  const { albums, fetchAlbums, isLoading } = useMusicStore();
+  useEffect(() => {
+    fetchAlbums();
+  }, [fetchAlbums]);
+  console.log({ albums });
+
   return (
     <div className="h-full flex flex-col gap-2">
       {/* navigation meu */}
@@ -53,7 +60,31 @@ const LeftSidebar = () => {
         </div>
         <ScrollArea className={"h-[calc(100vh-300px)]"}>
           <div className="space-y-2">
-            {isLoading ? <PlaylistSkeleton /> : "some music"}
+            {isLoading ? <PlaylistSkeleton /> : <ItemAlbums></ItemAlbums>}
+            {/* {isLoading ? (
+              <PlaylistSkeleton />
+            ) : (
+              albums.map((album) => (
+                <Link
+                  to={`/albums/${album.id}`}
+                  key={album.id}
+                  className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer"
+                >
+                  <img
+                    src={album.imageUrl}
+                    alt="Playlist img"
+                    className="size-12 rounded-md flex-shrink-0 object-cover"
+                  />
+
+                  <div className="flex-1 min-w-0 hidden md:block">
+                    <p className="font-medium truncate">{album.title}</p>
+                    <p className="text-sm text-zinc-400 truncate">
+                      Album • {album.artist}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            )} */}
           </div>
         </ScrollArea>
       </div>
@@ -62,3 +93,30 @@ const LeftSidebar = () => {
 };
 
 export default LeftSidebar;
+
+const ItemAlbums = () => {
+  const images = import.meta.glob("/public/cover-images/*.jpg", {
+    eager: true,
+  });
+  const imageUrls = Object.values(images).map((mod) => mod.default);
+
+  return (
+    <div className="space-y-4">
+      {imageUrls.map((url, index) => (
+        <div key={index} className="flex items-center gap-4">
+          <img
+            src={url}
+            alt={`Album ${index + 1}`}
+            className="size-12 rounded-md flex-shrink-0 object-cover"
+          />
+          <div className="flex-1 min-w-0 hidden md:block">
+            <p className="font-medium truncate">My Album {index + 1}</p>
+            <p className="text-sm text-zinc-400 truncate">
+              Album • Various Artist
+            </p>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};

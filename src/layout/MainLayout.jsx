@@ -8,6 +8,7 @@ import LeftSidebar from "./components/LeftSidebar";
 
 const MainLayout = () => {
   const isMobile = false;
+
   return (
     <div className="h-screen bg-black text-white flex flex-col">
       <ResizablePanelGroup
