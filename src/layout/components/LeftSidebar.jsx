@@ -101,21 +101,27 @@ const ItemAlbums = () => {
   const imageUrls = Object.values(images).map((mod) => mod.default);
 
   return (
-    <div className="space-y-4">
+    <div className="">
       {imageUrls.map((url, index) => (
-        <div key={index} className="flex items-center gap-4">
-          <img
-            src={url}
-            alt={`Album ${index + 1}`}
-            className="size-12 rounded-md flex-shrink-0 object-cover"
-          />
-          <div className="flex-1 min-w-0 hidden md:block">
-            <p className="font-medium truncate">My Album {index + 1}</p>
-            <p className="text-sm text-zinc-400 truncate">
-              Album • Various Artist
-            </p>
+        <Link
+          to={`/albums/${index}`}
+          key={index}
+          className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer"
+        >
+          <div key={index} className="flex items-center gap-4">
+            <img
+              src={url}
+              alt={`Album ${index + 1}`}
+              className="size-12 rounded-md flex-shrink-0 object-cover"
+            />
+            <div className="flex-1 min-w-0 hidden md:block">
+              <p className="font-medium truncate">My Album {index + 1}</p>
+              <p className="text-sm text-zinc-400 truncate">
+                Album • Various Artist
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );

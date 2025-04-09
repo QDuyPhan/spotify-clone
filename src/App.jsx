@@ -3,7 +3,7 @@ import Login from "./layout/Login";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Register from "./layout/Register";
-import Home from "./pages/Home";
+import Home from "./pages/home/Home";
 import { Button } from "./components/ui/button";
 import {
   AuthenticateWithRedirectCallback,
@@ -12,10 +12,11 @@ import {
   SignInButton,
   UserButton,
 } from "@clerk/clerk-react";
-import AuthCallbackPage from "./pages/AuthCallbackPage";
+import AuthCallbackPage from "./pages/auth-callback/AuthCallbackPage";
 // import { axiosInstance } from "./lib/axios";
 import MainLayout from "./layout/MainLayout";
 import ChatPage from "./pages/chat/ChatPage";
+import AlbumPage from "./pages/album/AlbumPage";
 
 function App() {
   // const getData = async () => {
