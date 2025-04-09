@@ -14,6 +14,8 @@ import {
 } from "@clerk/clerk-react";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import { axiosInstance } from "./lib/axios";
+import MainLayout from "./layout/MainLayout";
+import ChatPage from "./pages/chat/ChatPage";
 
 function App() {
   // const getData = async () => {
@@ -27,7 +29,13 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/chat" element={<ChatPage />} />
+        </Route>
+
+        {/* <Route path="/login" element={<Login />}></Route> */}
+
         <Route
           path="/sso-callback"
           element={
