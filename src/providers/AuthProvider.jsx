@@ -1,23 +1,32 @@
 import { axiosInstance } from "@/lib/axios";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useAuth } from "@clerk/clerk-react";
 import { Loader } from "lucide-react";
 import React, { useEffect, useState } from "react";
+
 const updateApiToken = (token) => {
   if (token)
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   else delete axiosInstance.defaults.headers.common["Authorization"];
 };
+
 const AuthProvider = ({ children }) => {
   const { getToken, userId } = useAuth();
   const [loading, setLoading] = useState(true);
+  const { checkAdminStatus } = useAuthStore();
   useEffect(() => {
     const initAuth = async () => {
       try {
         const token = await getToken();
+        console.log("Token", token);
+
         updateApiToken(token);
+        if (token) {
+          await checkAdminStatus();
+        }
       } catch (error) {
         updateApiToken(null);
-        console.log("Error in auth provider");
+        console.log("Error in auth provider", error);
       } finally {
         setLoading(false);
       }

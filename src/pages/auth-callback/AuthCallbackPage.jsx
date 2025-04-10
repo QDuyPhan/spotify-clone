@@ -8,11 +8,12 @@ import { useNavigate } from "react-router-dom";
 const AuthCallbackPage = () => {
   const { isLoaded, user } = useUser();
   const navigate = useNavigate();
-  // const symcAttempted = useRef(false);
+  const syncAttempted = useRef(false);
   useEffect(() => {
     const syncUser = async () => {
+      if (!isLoaded || !user || syncAttempted.current) return;
       try {
-        if (!isLoaded || !user) return;
+        syncAttempted.current = true;
         await axiosInstance.post("/auth/callback", {
           id: user.id,
           firstName: user.firstName,
