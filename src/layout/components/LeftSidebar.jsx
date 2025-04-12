@@ -9,7 +9,6 @@ import PlaylistSkeleton from "@/components/skeletons/PlaylistSkeleton";
 import { useMusicStore } from "@/stores/useMusicStore";
 
 const LeftSidebar = () => {
-  // const isLoading = false;
   const { albums, fetchAlbums, isLoading } = useMusicStore();
   useEffect(() => {
     fetchAlbums();

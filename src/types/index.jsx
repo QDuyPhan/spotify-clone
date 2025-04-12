@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 export const Songs = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   artist: PropTypes.string.isRequired,
   albumId: PropTypes.string, // có thể là null
@@ -13,7 +13,7 @@ export const Songs = PropTypes.shape({
 });
 
 export const Albums = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   artist: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,

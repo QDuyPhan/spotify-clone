@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useMusicStore } from "@/stores/useMusicStore";
 import { Clock, Play } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 export const formatDuration = (seconds) => {
@@ -12,10 +12,28 @@ export const formatDuration = (seconds) => {
 };
 
 const AlbumPage = () => {
-  const albumId = useParams();
+  const { albumId } = useParams();
   const { fetchAlbumById, currentAlbum, isLoading } = useMusicStore();
-  console.log(albumId);
 
+  useEffect(() => {
+    if (albumId) fetchAlbumById(albumId);
+  }, [fetchAlbumById, albumId]);
+
+  if (isLoading) return null;
+
+  // const handlePlayAlbum = () => {
+  // 	if (!currentAlbum) return;
+
+  // 	const isCurrentAlbumPlaying = currentAlbum?.songs.some((song) => song._id === currentSong?._id);
+  // 	if (isCurrentAlbumPlaying) togglePlay();
+  // 	else {
+  // 		// start playing the album from the beginning
+  // 		playAlbum(currentAlbum?.songs, 0);
+  // 	}
+  // };
+
+  console.log("albumId", albumId);
+  console.log("currentAlbum", currentAlbum);
   return (
     <div className="h-full">
       <ScrollArea className="h-full rounded-md">
@@ -32,26 +50,21 @@ const AlbumPage = () => {
             <div className="flex p-6 gap-6 pb-8">
               <div className="flex p-6 gap-6 pb-8">
                 <img
-                  // src={currentAlbum?.imageUrl}
-                  src="https://pickasso.spotifycdn.com/image/ab67c0de0000deef/dt/v1/img/radio/artist/6TITnFVRcl0AcZ4syE7Toe/vi"
+                  src={currentAlbum?.image_url}
                   alt={currentAlbum?.title}
                   className="w-[240px] h-[240px] shadow-xl rounded"
                 />
                 <div className="flex flex-col justify-end">
                   <p className="text-sm font-medium">Album</p>
                   <h1 className="text-7xl font-bold my-4">
-                    {/* {currentAlbum?.title} */}
-                    Low G Radio
+                    {currentAlbum?.title}
                   </h1>
                   <div className="flex items-center gap-2 text-sm text-zinc-100">
                     <span className="font-medium text-white">
-                      {/* {currentAlbum?.artist} */}
-                      Với RPT MCK, tlinh, Obito và nhiều hơn nữa
+                      {currentAlbum?.artist}
                     </span>
-                    {/* <span>• {currentAlbum?.songs.length} songs</span> */}
-                    <span>• 50 songs</span>
-                    {/* <span>• {currentAlbum?.releaseYear}</span> */}
-                    <span>• 2025</span>
+                    <span>• {currentAlbum?.songs.length ?? 0} songs</span>
+                    <span>• {currentAlbum?.release_year}</span>
                   </div>
                 </div>
               </div>
@@ -95,36 +108,35 @@ const AlbumPage = () => {
             <div className="px-6">
               <div className="space-y-2 py-4">
                 <div className="flex items-center justify-center"></div>
-                <ItemSong />
-                <ItemSong />
-                <ItemSong />
-                <ItemSong />
-                {/* {currentAlbum?.songs.map((song, index) => {
-                   const isCurrentSong = currentSong?._id === song._id; 
+                {currentAlbum?.songs.map((song, index) => {
+                  {
+                    /* const isCurrentSong = currentSong?._id === song._id; */
+                  }
 
                   return (
                     <div
-                      key={index}
-                      key={song._id}
-                      onClick={() => handlePlaySong(index)}
+                      key={song.id}
+                      // onClick={() => handlePlaySong(index)}
                       className={`grid grid-cols-[16px_4fr_2fr_1fr] gap-4 px-4 py-2 text-sm 
                       text-zinc-400 hover:bg-white/5 rounded-md group cursor-pointer
                       `}
                     >
                       <div className="flex items-center justify-center">
-                        {isCurrentSong && isPlaying ? (
-														<div className='size-4 text-green-500'>♫</div>
-													) : (
-														<span className='group-hover:hidden'>{index + 1}</span>
-													)}
-													{!isCurrentSong && (
-														<Play className='h-4 w-4 hidden group-hover:block' />
-													)}
+                        {/* {isCurrentSong ? (
+                          <div className="size-4 text-green-500">♫</div>
+                        ) : (
+                          <span className="group-hover:hidden">
+                            {index + 1}
+                          </span>
+                        )}
+                        {!isCurrentSong && (
+                          <Play className="h-4 w-4 hidden group-hover:block" />
+                        )} */}
                       </div>
 
                       <div className="flex items-center gap-3">
                         <img
-                          src={song.imageUrl}
+                          src={song.image_url}
                           alt={song.title}
                           className="size-10"
                         />
@@ -133,21 +145,19 @@ const AlbumPage = () => {
                           <div className={`font-medium text-white`}>
                             {song.title}
                           </div>
-                          <div>
-                            {song.artist}
-                          </div>
+                          <div>{song.artist}</div>
                         </div>
                       </div>
 
                       <div className="flex items-center">
-                        {song.createdAt.split("T")[0]}
+                        {song.created_at.split("T")[0]}
                       </div>
                       <div className="flex items-center">
                         {formatDuration(song.duration)}
                       </div>
                     </div>
                   );
-                })} */}
+                })}
               </div>
             </div>
           </div>
