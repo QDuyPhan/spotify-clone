@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
       }
     };
     initAuth();
-  }, [getToken]);
+  }, [getToken, checkAdminStatus]);
   if (loading)
     return (
       <div className="h-screen w-full flex items-center justify-center">

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
 
 const Topbar = () => {
-  const { isAdmin } = useAuthStore;
+  const { isAdmin } = useAuthStore();
   console.log("Topbar isAdmin", isAdmin);
 
   return (
@@ -29,14 +29,14 @@ const Topbar = () => {
             <span>Admin Dashboard</span>
           </Link>
         )}
-        <SignedIn>
+        {/* <SignedIn>
           <SignInOAuthButtons />
-        </SignedIn>
+        </SignedIn> */}
         <SignedOut>
           <SignInOAuthButtons />
         </SignedOut>
 
-        <span>Sign out</span>
+        {/* <span>Sign out</span> */}
         <UserButton />
       </div>
     </div>

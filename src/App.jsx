@@ -13,20 +13,11 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import AuthCallbackPage from "./pages/auth-callback/AuthCallbackPage";
-// import { axiosInstance } from "./lib/axios";
 import MainLayout from "./layout/MainLayout";
 import ChatPage from "./pages/chat/ChatPage";
 import AlbumPage from "./pages/album/AlbumPage";
 
 function App() {
-  // const getData = async () => {
-  //   const res = await axiosInstance.get("/users", {
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-  //   console.log(res);
-  // };
   return (
     <>
       <Routes>

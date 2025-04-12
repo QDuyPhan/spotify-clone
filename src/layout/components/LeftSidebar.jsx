@@ -60,8 +60,8 @@ const LeftSidebar = () => {
         </div>
         <ScrollArea className={"h-[calc(100vh-300px)]"}>
           <div className="space-y-2">
-            {isLoading ? <PlaylistSkeleton /> : <ItemAlbums></ItemAlbums>}
-            {/* {isLoading ? (
+            {/* {isLoading ? <PlaylistSkeleton /> : <ItemAlbums></ItemAlbums>} */}
+            {isLoading ? (
               <PlaylistSkeleton />
             ) : (
               albums.map((album) => (
@@ -71,7 +71,7 @@ const LeftSidebar = () => {
                   className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer"
                 >
                   <img
-                    src={album.imageUrl}
+                    src={album.image_url}
                     alt="Playlist img"
                     className="size-12 rounded-md flex-shrink-0 object-cover"
                   />
@@ -84,7 +84,7 @@ const LeftSidebar = () => {
                   </div>
                 </Link>
               ))
-            )} */}
+            )}
           </div>
         </ScrollArea>
       </div>
