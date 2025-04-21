@@ -2,7 +2,8 @@ import { create } from "zustand";
 
 import React from "react";
 import { axiosInstance } from "@/lib/axios";
-import { Albums, Songs } from "@/types";
+import { Albums, Songs, Stats } from "@/types";
+
 /**
  * @typedef {Object} MusicStore
  * @property {Array<Songs>} songs
@@ -10,6 +11,7 @@ import { Albums, Songs } from "@/types";
  * @property {boolean} isLoading
  * @property {string|null} error
  * @property {Albums|null} currentAlbum
+ * @property {Stats|null} stats
  * @property {Array<Songs>} madeForYouSongs
  * @property {Array<Songs>} featureSongs
  * @property {Array<Songs>} trendingSongs
@@ -18,6 +20,10 @@ import { Albums, Songs } from "@/types";
  * @property {() => Promise<void>} fetchFeaturedSongs
  * @property {() => Promise<void>} fetchMadeForYouSongs
  * @property {() => Promise<void>} fetchTrendingSongs
+ * @property {() => Promise<void>} fetchStats
+ * @property {() => Promise<void>} fetchSongs
+ * @property {(id:string) => Promise<void>} deleteSong
+ * @property {(id:string) => Promise<void>} deleteAlbum
  */
 /** @type {import('zustand').StateCreator<MusicStore>} */
 export const useMusicStore = create((set) => ({
@@ -29,6 +35,17 @@ export const useMusicStore = create((set) => ({
   madeForYouSongs: [],
   featureSongs: [],
   trendingSongs: [],
+  stats: {
+    totalSongs: 0,
+    totalAlbums: 0,
+    totalUsers: 0,
+    totalArtists: 0,
+  },
+
+  deleteSong: async (id) => {},
+  deleteAlbum: async (id) => {},
+  fetchSongs: async () => {},
+  fetchStats: async () => {},
 
   fetchAlbums: async () => {
     set({
@@ -46,10 +63,12 @@ export const useMusicStore = create((set) => ({
     }
   },
 
-  fetchAlbumById: async (id) => {
+  fetchAlbumsById: async (id) => {
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.get(`/albums/${id}`);
+      console.log("fetchAlbumById: ", response);
+
       set({ currentAlbum: response.data });
     } catch (error) {
       set({ error: error.response.data.message });

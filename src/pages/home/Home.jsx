@@ -23,7 +23,7 @@ const Home = () => {
     fetchTrendingSongs();
   }, [fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs]);
 
-  console.log(madeForYouSongs, trendingSongs, featureSongs, isLoading);
+  // console.log(madeForYouSongs, trendingSongs, featureSongs, isLoading);
 
   return (
     <main className="rounded-md overflow-hidden h-full bg-gradient-to-b from-zinc-800 to-zinc-900">

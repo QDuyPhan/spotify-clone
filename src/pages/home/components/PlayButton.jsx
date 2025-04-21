@@ -6,7 +6,7 @@ const PlayButton = ({ song }) => {
   const { currentSong, isPlaying, setCurrentSong, togglePlay } =
     usePlayerStore();
   const isCurrentSong = currentSong?.id === song.id;
-  console.log("isCurrentSong: ", isCurrentSong);
+  // console.log("isCurrentSong: ", isCurrentSong);
 
   const handlePlay = () => {
     if (isCurrentSong) togglePlay();

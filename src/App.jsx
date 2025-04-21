@@ -16,6 +16,7 @@ import AuthCallbackPage from "./pages/auth-callback/AuthCallbackPage";
 import MainLayout from "./layout/MainLayout";
 import ChatPage from "./pages/chat/ChatPage";
 import AlbumPage from "./pages/album/AlbumPage";
+import AdminPage from "./pages/admin/AdminPage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           }
         ></Route>
         <Route path="/auth-callback" element={<AuthCallbackPage />}></Route>
+        <Route path="/admin" element={<AdminPage />}></Route>
       </Routes>
     </>
   );
