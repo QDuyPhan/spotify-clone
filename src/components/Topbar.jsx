@@ -6,9 +6,8 @@ import SignInOAuthButtons from "./SignInOAuthButtons";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "./ui/button";
-
 const Topbar = () => {
-  const { isAdmin } = useAuthStore();
+  const { isAdmin, isLoading } = useAuthStore();
   console.log("Topbar isAdmin", isAdmin);
 
   return (
@@ -20,7 +19,7 @@ const Topbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        {isAdmin && (
+        {!isAdmin && (
           <Link
             to="/admin"
             className={cn(buttonVariants({ variant: "outline" }))}
@@ -29,14 +28,9 @@ const Topbar = () => {
             <span>Admin Dashboard</span>
           </Link>
         )}
-        {/* <SignedIn>
-          <SignInOAuthButtons />
-        </SignedIn> */}
         <SignedOut>
           <SignInOAuthButtons />
         </SignedOut>
-
-        {/* <span>Sign out</span> */}
         <UserButton />
       </div>
     </div>

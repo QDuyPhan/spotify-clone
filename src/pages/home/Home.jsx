@@ -1,34 +1,35 @@
 import Topbar from "@/components/Topbar";
 import { useMusicStore } from "@/stores/useMusicStore";
 import React, { useEffect } from "react";
-// import FeaturedSection from "./components/FeaturedSection";
+import FeaturedSection from "./components/FeaturedSection";
 import { ScrollArea } from "@/components/ui/scroll-area";
-// import SectionGrid from "./components/SectionGrid";
+import SectionGrid from "./components/SectionGrid";
 
 const Home = () => {
-  // const {
-  //   fetchFeatureSongs,
-  //   fetchMadeForYouSongs,
-  //   fetchTrendingSongs,
-  //   isLoading,
-  //   madeForYouSongs,
-  //   featureSongs,
-  //   trendingSongs,
-  //   error,
-  // } = useMusicStore();
+  const {
+    fetchFeaturedSongs, // <-- sửa lại đúng tên hàm
+    fetchMadeForYouSongs,
+    fetchTrendingSongs,
+    isLoading,
+    madeForYouSongs,
+    featureSongs,
+    trendingSongs,
+    error,
+  } = useMusicStore();
 
-  // useEffect(() => {
-  //   fetchFeatureSongs();
-  //   fetchMadeForYouSongs();
-  //   fetchTrendingSongs();
-  // }, [fetchFeatureSongs, fetchMadeForYouSongs, fetchTrendingSongs]);
-  // console.log(madeForYouSongs, trendingSongs, featureSongs, isLoading);
+  useEffect(() => {
+    fetchFeaturedSongs();
+    fetchMadeForYouSongs();
+    fetchTrendingSongs();
+  }, [fetchFeaturedSongs, fetchMadeForYouSongs, fetchTrendingSongs]);
+
+  console.log(madeForYouSongs, trendingSongs, featureSongs, isLoading);
 
   return (
     <main className="rounded-md overflow-hidden h-full bg-gradient-to-b from-zinc-800 to-zinc-900">
       <div className="rounded-md overflow-hidden">
         <Topbar></Topbar>
-        {/* <ScrollArea className="h-[calc(100vh-180px)]">
+        <ScrollArea className="h-[calc(100vh-180px)]">
           <div className="p-4 sm:p-6">
             <h1 className="text-2xl sm:text-3xl font-bold mb-6">
               Good afternoon
@@ -39,7 +40,7 @@ const Home = () => {
               <SectionGrid title={"Trending"} songs={trendingSongs} />
             </div>
           </div>
-        </ScrollArea> */}
+        </ScrollArea>
       </div>
     </main>
   );

@@ -15,7 +15,7 @@ import { Albums, Songs } from "@/types";
  * @property {Array<Songs>} trendingSongs
  * @property {() => Promise<void>} fetchAlbums
  * @property {(id: string) => Promise<void>} fetchAlbumsById
- * @property {() => Promise<void>} fetchFeatureSongs
+ * @property {() => Promise<void>} fetchFeaturedSongs
  * @property {() => Promise<void>} fetchMadeForYouSongs
  * @property {() => Promise<void>} fetchTrendingSongs
  */
@@ -62,7 +62,7 @@ export const useMusicStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.get("/songs/featured");
-      set({ featuredSongs: response.data });
+      set({ featureSongs: response.data });
     } catch (error) {
       set({ error: error.response.data.message });
     } finally {

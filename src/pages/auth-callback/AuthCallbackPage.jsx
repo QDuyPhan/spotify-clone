@@ -9,25 +9,32 @@ const AuthCallbackPage = () => {
   const { isLoaded, user } = useUser();
   const navigate = useNavigate();
   const syncAttempted = useRef(false);
+
   useEffect(() => {
     const syncUser = async () => {
       if (!isLoaded || !user || syncAttempted.current) return;
       try {
         syncAttempted.current = true;
-        await axiosInstance.post("/auth/callback", {
+        const response = await axiosInstance.post("/auth/callback", {
           id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           imageUrl: user.imageUrl,
+          email: user.primaryEmailAddress.emailAddress,
         });
+        console.log("Email:", user.primaryEmailAddress.emailAddress);
       } catch (error) {
-        console.log("Error in auth callback", error);
+        console.error(
+          "Error in auth callback:",
+          error.response?.data || error.message
+        );
       } finally {
         navigate("/");
       }
     };
     syncUser();
   }, [isLoaded, user, navigate]);
+
   return (
     <div className="h-screen w-full bg-black flex items-center justify-center">
       <Card className={"w-[90%] max-w-md bg-zinc-900 border-zinc-800"}>
