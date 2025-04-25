@@ -3,6 +3,7 @@ import { create } from "zustand";
 import React from "react";
 import { axiosInstance } from "@/lib/axios";
 import { Albums, Songs, Stats } from "@/types";
+import toast from "react-hot-toast";
 
 /**
  * @typedef {Object} MusicStore
@@ -42,10 +43,63 @@ export const useMusicStore = create((set) => ({
     totalArtists: 0,
   },
 
-  deleteSong: async (id) => {},
-  deleteAlbum: async (id) => {},
-  fetchSongs: async () => {},
-  fetchStats: async () => {},
+  deleteSong: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      await axiosInstance.delete(`/admin/songs/${id}`);
+
+      set((state) => ({
+        songs: state.songs.filter((song) => song.id !== id),
+      }));
+      toast.success("Song deleted successfully");
+    } catch (error) {
+      console.log("Error in deleteSong", error);
+      toast.error("Error deleting song");
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  deleteAlbum: async (id) => {
+    set({ isLoading: true, error: null });
+    try {
+      await axiosInstance.delete(`/admin/albums/${id}`);
+      set((state) => ({
+        albums: state.albums.filter((album) => album.id !== id),
+        songs: state.songs.map((song) =>
+          song.albumId === state.albums.find((a) => a.id === id)?.title
+            ? { ...song, album: null }
+            : song
+        ),
+      }));
+      toast.success("Album deleted successfully");
+    } catch (error) {
+      toast.error("Failed to delete album: " + error.message);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  fetchSongs: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get("/songs");
+      set({ songs: response.data });
+    } catch (error) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+  fetchStats: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get("/stats");
+      set({ stats: response.data });
+    } catch (error) {
+      set({ error: error.message });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
   fetchAlbums: async () => {
     set({

@@ -29,7 +29,7 @@ export const Stats = PropTypes.shape({
 });
 
 export const Message = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   senderId: PropTypes.string.isRequired,
   receiverId: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
@@ -38,7 +38,7 @@ export const Message = PropTypes.shape({
 });
 
 export const User = PropTypes.shape({
-  _id: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
   clerkId: PropTypes.string.isRequired,
   fullName: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
