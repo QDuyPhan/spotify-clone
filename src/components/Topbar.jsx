@@ -19,7 +19,7 @@ const Topbar = () => {
       </div>
 
       <div className="flex items-center gap-4">
-        {!isAdmin && (
+        {isAdmin && (
           <Link
             to="/admin"
             className={cn(buttonVariants({ variant: "outline" }))}

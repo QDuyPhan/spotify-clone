@@ -106,7 +106,6 @@ export const useMusicStore = create((set) => ({
       isLoading: true,
       error: null,
     });
-
     try {
       const response = await axiosInstance.get("/albums");
       set({ albums: response.data });

@@ -21,7 +21,7 @@ export const useAuthStore = create((set) => ({
       const response = await axiosInstance.get("/admin/check/");
       console.log("Check admin response:", response.data);
 
-      set({ isAdmin: response.data.is_admin }); // Đảm bảo key khớp với response backend
+      set({ isAdmin: response.data.admin }); // Đảm bảo key khớp với response backend
     } catch (error) {
       console.error("Error checking admin status:", error.response?.data);
       set({

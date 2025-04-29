@@ -11,15 +11,14 @@ import AlbumsTabContent from "./components/AlbumsTabContent";
 const AdminPage = () => {
   const { isAdmin, isLoading } = useAuthStore();
 
-  const { fetchAlbums, fetchSongs, fetchStats } = useMusicStore();
+  const { fetchAlbums, fetchStats } = useMusicStore();
 
   useEffect(() => {
     fetchAlbums();
-    fetchSongs();
     fetchStats();
-  }, [fetchAlbums, fetchSongs, fetchStats]);
+  }, [fetchAlbums, fetchStats]);
 
-  // if (!isAdmin && !isLoading) return <div>Unauthorized</div>;
+  if (!isAdmin && !isLoading) return <div>Unauthorized</div>;
   return (
     <div
       className="min-h-screen bg-gradient-to-b from-zinc-900 via-zinc-900

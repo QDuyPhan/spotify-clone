@@ -74,7 +74,7 @@ const AddSongDialog = () => {
       formData.append("artist", newSong.artist);
       formData.append("duration", newSong.duration);
       if (newSong.album && newSong.album !== "none") {
-        formData.append("albumId", newSong.album);
+        formData.append("album_id", newSong.album);
       }
       formData.append("audioFile", files.audio);
       formData.append("imageFile", files.image);

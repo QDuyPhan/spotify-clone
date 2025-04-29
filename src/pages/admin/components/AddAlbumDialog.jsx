@@ -68,7 +68,7 @@ const AddAlbumDialog = () => {
       const formData = new FormData();
       formData.append("title", newAlbum.title);
       formData.append("artist", newAlbum.artist);
-      formData.append("releaseYear", newAlbum.releaseYear.toString());
+      formData.append("release_year", newAlbum.releaseYear.toString());
       formData.append("imageFile", imageFile);
 
       await axiosInstance.post("/admin/albums", formData, {

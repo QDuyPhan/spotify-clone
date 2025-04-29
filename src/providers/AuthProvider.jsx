@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const token = await getToken();
+        const token = await getToken({ template: "jwt_spotify" });
         if (!token) {
           throw new Error("Failed to get token from Clerk");
         }

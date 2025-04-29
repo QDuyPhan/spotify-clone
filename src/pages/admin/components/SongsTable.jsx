@@ -1,5 +1,5 @@
 import { useMusicStore } from "@/stores/useMusicStore";
-import React from "react";
+import React, { useEffect } from "react";
 import { Calendar, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,12 @@ import {
 } from "@/components/ui/table";
 
 const SongsTable = () => {
-  const { songs, isLoading, error, deleteSong } = useMusicStore();
+  const { songs, isLoading, error, deleteSong, fetchSongs } = useMusicStore();
+
+  useEffect(() => {
+    fetchSongs();
+  }, [fetchSongs]);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -21,13 +26,14 @@ const SongsTable = () => {
     );
   }
 
-  if (!error) {
+  if (error) {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="text-red-400">{error}</div>
       </div>
     );
   }
+
   return (
     <Table>
       <TableHeader>
@@ -77,5 +83,4 @@ const SongsTable = () => {
     </Table>
   );
 };
-
 export default SongsTable;
