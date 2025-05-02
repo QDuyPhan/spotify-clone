@@ -14,32 +14,34 @@ export const formatDuration = (seconds) => {
 
 const AlbumPage = () => {
   const { albumId } = useParams();
-  const { fetchAlbumsById, currentAlbum, isLoading } = useMusicStore();
+  const { fetchAlbumsById, currentAlbum, isLoading, error } = useMusicStore();
   const { currentSong, isPlaying, playAlbum, togglePlay } = usePlayerStore();
 
+  // Lấy thông tin album
   useEffect(() => {
     if (albumId) fetchAlbumsById(albumId);
   }, [fetchAlbumsById, albumId]);
 
-  if (isLoading) return null;
+  if (isLoading) return <div>Đang tải...</div>;
+  if (error) return <div>Lỗi: {error}</div>;
+  if (!currentAlbum) return <div>Không tìm thấy album</div>;
 
+  // Hàm play album
   const handlePlayAlbum = () => {
-    if (!currentAlbum) return;
-
-    const isCurrentAlbumPlaying = currentAlbum?.songs.some(
+    if (!currentAlbum.songs?.length) return;
+    const isCurrentAlbumPlaying = currentAlbum.songs.some(
       (song) => song.id === currentSong?.id
     );
     if (isCurrentAlbumPlaying) togglePlay();
     else {
-      // start playing the album from the beginning
-      playAlbum(currentAlbum?.songs, 0);
+      playAlbum(currentAlbum.songs, 0);
     }
   };
 
+  // Hàm play từng bài hát
   const handlePlaySong = (index) => {
-    if (!currentAlbum) return;
-
-    playAlbum(currentAlbum?.songs, index);
+    if (!currentAlbum.songs?.length) return;
+    playAlbum(currentAlbum.songs, index);
   };
 
   return (
@@ -58,21 +60,21 @@ const AlbumPage = () => {
           <div className="relative z-10">
             <div className="flex p-6 gap-6 pb-8">
               <img
-                src={currentAlbum?.image_url}
-                alt={currentAlbum?.title}
+                src={currentAlbum.image_url}
+                alt={currentAlbum.title}
                 className="w-[240px] h-[240px] shadow-xl rounded"
               />
               <div className="flex flex-col justify-end">
                 <p className="text-sm font-medium">Album</p>
                 <h1 className="text-7xl font-bold my-4">
-                  {currentAlbum?.title}
+                  {currentAlbum.title}
                 </h1>
                 <div className="flex items-center gap-2 text-sm text-zinc-100">
                   <span className="font-medium text-white">
-                    {currentAlbum?.artist}
+                    {currentAlbum.artist}
                   </span>
-                  <span>• {currentAlbum?.songs.length ?? 0} songs</span>
-                  <span>• {currentAlbum?.release_year}</span>
+                  <span>• {currentAlbum.songs?.length ?? 0} songs</span>
+                  <span>• {currentAlbum.release_year}</span>
                 </div>
               </div>
             </div>
@@ -86,7 +88,7 @@ const AlbumPage = () => {
                 hover:scale-105 transition-all"
               >
                 {isPlaying &&
-                currentAlbum?.songs.some(
+                currentAlbum.songs?.some(
                   (song) => song.id === currentSong?.id
                 ) ? (
                   <Pause className="h-7 w-7 text-black" />
@@ -112,10 +114,9 @@ const AlbumPage = () => {
               </div>
 
               {/* songs list */}
-
               <div className="px-6">
                 <div className="space-y-2 py-4">
-                  {currentAlbum?.songs.map((song, index) => {
+                  {currentAlbum.songs?.map((song, index) => {
                     const isCurrentSong = currentSong?.id === song.id;
                     return (
                       <div
@@ -153,8 +154,7 @@ const AlbumPage = () => {
                           </div>
                         </div>
                         <div className="flex items-center">
-                          {" "}
-                          {song.created_at.split("T")[0]}
+                          {song.created_at?.split("T")[0]}
                         </div>
                         <div className="flex items-center">
                           {formatDuration(song.duration)}

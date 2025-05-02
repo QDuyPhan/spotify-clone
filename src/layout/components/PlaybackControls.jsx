@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { useMusicStore } from "@/stores/useMusicStore";
 import { usePlayerStore } from "@/stores/usePlayerStore";
 import {
+  HeartIcon,
+  HeartOffIcon,
   Laptop2,
   ListMusic,
   Mic2,
@@ -22,13 +25,15 @@ const formatTime = (seconds) => {
 };
 
 const PlaybackControls = () => {
-  const { currentSong, isPlaying, playNext, togglePlay, playPrevious } =
+  const { currentSong, isPlaying, playNext, togglePlay, playPrevious, setCurrentSong } =
     usePlayerStore();
   const [volume, setVolume] = useState(75);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   /** @type {React.RefObject<HTMLAudioElement>} */
   const audioRef = useRef(null);
+  const { favoriteSongs, toggleFavoriteSong, isFavorite } = useMusicStore();
+  const isCurrentSongFavorite = favoriteSongs.some((song) => song.id === currentSong?.id);
 
   useEffect(() => {
     audioRef.current = document.querySelector("audio");
@@ -158,8 +163,16 @@ const PlaybackControls = () => {
             size="icon"
             variant="ghost"
             className="hover:text-white text-zinc-400"
+            onClick={() => {
+              if (currentSong) toggleFavoriteSong(currentSong.id, isFavorite);
+            }}
+            disabled={!currentSong}
           >
-            <Mic2 className="h-4 w-4" />
+            { isCurrentSongFavorite ? (
+              <HeartIcon className="h-4 w-4 text-red-500" />
+            ) : (
+              <HeartOffIcon className="h-4 w-4" />
+            )}
           </Button>
           <Button
             size="icon"

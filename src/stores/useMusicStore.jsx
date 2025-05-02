@@ -25,6 +25,13 @@ import toast from "react-hot-toast";
  * @property {() => Promise<void>} fetchSongs
  * @property {(id:string) => Promise<void>} deleteSong
  * @property {(id:string) => Promise<void>} deleteAlbum
+ * @property {Array<Albums>} myAlbums
+ * @property {() => Promise<void>} fetchMyAlbums
+ * @property {() => Promise<void>} fetchSongsOfAlbum
+ * @property {Array<Songs>} favoriteSongs
+ * @property {(songId: string, isFavorite: boolean) => Promise<void>} toggleFavoriteSong
+ * @property {() => Promise<void>} fetchFavoriteSongs
+ * @property {boolean} isFavorite
  */
 /** @type {import('zustand').StateCreator<MusicStore>} */
 export const useMusicStore = create((set) => ({
@@ -36,11 +43,31 @@ export const useMusicStore = create((set) => ({
   madeForYouSongs: [],
   featureSongs: [],
   trendingSongs: [],
+  myAlbums: [],
   stats: {
     totalSongs: 0,
     totalAlbums: 0,
     totalUsers: 0,
     totalArtists: 0,
+  },
+  favoriteSongs: [],
+  isFavorite: false,
+
+  fetchMyAlbums: async () => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get("/albums/user/");
+      set({ myAlbums: response.data });
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to fetch your albums",
+      });
+    } finally {
+      set({ isLoading: false });
+    }
   },
 
   deleteSong: async (id) => {
@@ -62,7 +89,7 @@ export const useMusicStore = create((set) => ({
   deleteAlbum: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      await axiosInstance.delete(`/admin/albums/${id}`);
+      await axiosInstance.delete(`/admin/albums/${id}/`);
       set((state) => ({
         albums: state.albums.filter((album) => album.id !== id),
         songs: state.songs.map((song) =>
@@ -119,7 +146,7 @@ export const useMusicStore = create((set) => ({
   fetchAlbumsById: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get(`/albums/${id}`);
+      const response = await axiosInstance.get(`/albums/${id}/`);
       console.log("fetchAlbumById: ", response);
 
       set({ currentAlbum: response.data });
@@ -163,6 +190,55 @@ export const useMusicStore = create((set) => ({
       set({ error: error.response.data.message });
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  fetchSongsOfAlbum: async (albumId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axiosInstance.get(`/albums/${albumId}/songs/`);
+      set({ songs: response.data });
+    } catch (error) {
+      set({
+        error:
+          error.response?.data?.error ||
+          error.message ||
+          "Failed to fetch songs of album",
+      });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+
+  toggleFavoriteSong: async (songId, isFavorite) => {
+    try {
+      if (isFavorite) {
+        // Xóa khỏi yêu thích
+        await axiosInstance.delete("/songs/favorite/", { data: { song_id: songId } });
+        set({
+          isFavorite: false,
+        });
+        toast.success("Đã xóa khỏi yêu thích");
+      } else {
+        // Thêm vào yêu thích
+        await axiosInstance.post("/songs/favorite/", { song_id: songId });
+        set({
+          isFavorite: true,
+        });
+        toast.success("Đã thêm vào yêu thích");
+      }
+      // Sau khi cập nhật, có thể gọi lại fetchFavoriteSongs nếu muốn đồng bộ
+    } catch (error) {
+      toast.error(error.response?.data?.error || "Lỗi thao tác yêu thích");
+    }
+  },
+
+  fetchFavoriteSongs: async () => {
+    try {
+      const response = await axiosInstance.get("/songs/favorite/list/");
+      set({ favoriteSongs: response.data });
+    } catch (error) {
+      toast.error("Không thể lấy danh sách yêu thích");
     }
   },
 }));
