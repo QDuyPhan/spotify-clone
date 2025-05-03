@@ -32,7 +32,7 @@ const PlaybackControls = () => {
   const [duration, setDuration] = useState(0);
   /** @type {React.RefObject<HTMLAudioElement>} */
   const audioRef = useRef(null);
-  const { favoriteSongs, toggleFavoriteSong, isFavorite } = useMusicStore();
+  const { favoriteSongs, toggleFavoriteSong } = useMusicStore();
   const isCurrentSongFavorite = favoriteSongs.some((song) => song.id === currentSong?.id);
 
   useEffect(() => {
@@ -164,7 +164,7 @@ const PlaybackControls = () => {
             variant="ghost"
             className="hover:text-white text-zinc-400"
             onClick={() => {
-              if (currentSong) toggleFavoriteSong(currentSong.id, isFavorite);
+              if (currentSong) toggleFavoriteSong(currentSong.id);
             }}
             disabled={!currentSong}
           >

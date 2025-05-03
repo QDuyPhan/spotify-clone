@@ -29,12 +29,11 @@ import toast from "react-hot-toast";
  * @property {() => Promise<void>} fetchMyAlbums
  * @property {() => Promise<void>} fetchSongsOfAlbum
  * @property {Array<Songs>} favoriteSongs
- * @property {(songId: string, isFavorite: boolean) => Promise<void>} toggleFavoriteSong
+ * @property {(songId: string) => Promise<void>} toggleFavoriteSong
  * @property {() => Promise<void>} fetchFavoriteSongs
- * @property {boolean} isFavorite
  */
 /** @type {import('zustand').StateCreator<MusicStore>} */
-export const useMusicStore = create((set) => ({
+export const useMusicStore = create((set, get) => ({
   albums: [],
   songs: [],
   isLoading: false,
@@ -51,7 +50,6 @@ export const useMusicStore = create((set) => ({
     totalArtists: 0,
   },
   favoriteSongs: [],
-  isFavorite: false,
 
   fetchMyAlbums: async () => {
     set({ isLoading: true, error: null });
@@ -73,15 +71,21 @@ export const useMusicStore = create((set) => ({
   deleteSong: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      await axiosInstance.delete(`/admin/songs/${id}`);
-
-      set((state) => ({
-        songs: state.songs.filter((song) => song.id !== id),
-      }));
-      toast.success("Song deleted successfully");
+      const response = await axiosInstance.delete(`/songs/${id}/delete/`);
+      
+      if (response.data.message === "Song deleted successfully") {
+        set((state) => ({
+          songs: state.songs.filter((song) => song.id !== id),
+        }));
+        toast.success("Song deleted successfully");
+      }
     } catch (error) {
-      console.log("Error in deleteSong", error);
-      toast.error("Error deleting song");
+      const errorMessage = error.response?.data?.error || "Failed to delete song";
+      if (error.response?.status === 403) {
+        toast.error("You do not have permission to delete this song");
+      } else {
+        toast.error(errorMessage);
+      }
     } finally {
       set({ isLoading: false });
     }
@@ -89,18 +93,18 @@ export const useMusicStore = create((set) => ({
   deleteAlbum: async (id) => {
     set({ isLoading: true, error: null });
     try {
-      await axiosInstance.delete(`/admin/albums/${id}/`);
-      set((state) => ({
-        albums: state.albums.filter((album) => album.id !== id),
-        songs: state.songs.map((song) =>
-          song.albumId === state.albums.find((a) => a.id === id)?.title
-            ? { ...song, album: null }
-            : song
-        ),
-      }));
-      toast.success("Album deleted successfully");
+      const response = await axiosInstance.delete(`/albums/${id}/delete/`);
+      
+      if (response.data.deleted_album_id) {
+        set((state) => ({
+          albums: state.albums.filter((album) => album.id !== id),
+          songs: state.songs.filter((song) => song.albumId !== id),
+        }));
+        toast.success("Album and associated songs deleted successfully");
+      }
     } catch (error) {
-      toast.error("Failed to delete album: " + error.message);
+      const errorMessage = error.response?.data?.error || error.response?.data?.details || "Failed to delete album";
+      toast.error(errorMessage);
     } finally {
       set({ isLoading: false });
     }
@@ -210,24 +214,26 @@ export const useMusicStore = create((set) => ({
     }
   },
 
-  toggleFavoriteSong: async (songId, isFavorite) => {
+  toggleFavoriteSong: async (songId) => {
+    const state = get();
+    const isFavorite = state.favoriteSongs.some((song) => song.id === songId);
     try {
       if (isFavorite) {
-        // Xóa khỏi yêu thích
         await axiosInstance.delete("/songs/favorite/", { data: { song_id: songId } });
         set({
-          isFavorite: false,
+          favoriteSongs: state.favoriteSongs.filter((song) => song.id !== songId),
         });
         toast.success("Đã xóa khỏi yêu thích");
       } else {
-        // Thêm vào yêu thích
         await axiosInstance.post("/songs/favorite/", { song_id: songId });
-        set({
-          isFavorite: true,
-        });
+        const song = state.songs.find((s) => s.id === songId);
+        if (song && !state.favoriteSongs.some((s) => s.id === songId)) {
+          set({
+            favoriteSongs: [...state.favoriteSongs, song],
+          });
+        }
         toast.success("Đã thêm vào yêu thích");
       }
-      // Sau khi cập nhật, có thể gọi lại fetchFavoriteSongs nếu muốn đồng bộ
     } catch (error) {
       toast.error(error.response?.data?.error || "Lỗi thao tác yêu thích");
     }
