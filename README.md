@@ -19,7 +19,6 @@ Một ứng dụng web hiện đại mô phỏng các tính năng và giao diệ
 - React Router DOM 7
 - Zustand (quản lý state)
 - Clerk (xác thực)
-- Socket.IO Client
 - Axios
 - React Hot Toast
 
