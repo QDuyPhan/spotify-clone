@@ -14,9 +14,9 @@ import {
 const SongsTable = () => {
   const { songs, isLoading, error, deleteSong, fetchSongs } = useMusicStore();
 
-  useEffect(() => {
-    fetchSongs();
-  }, [fetchSongs]);
+  // useEffect(() => {
+  //   fetchSongs();
+  // }, [fetchSongs]);
 
   if (isLoading) {
     return (
