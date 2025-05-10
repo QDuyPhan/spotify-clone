@@ -86,6 +86,22 @@ const LeftSidebar = () => {
                 <PlaylistSkeleton />
               ) : (
                 <>
+                  {/* Favorite Songs as a special album */}
+                  {favoriteSongs.length > 0 && (
+                    <Link
+                      to="/albums/favorites"
+                      className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer"
+                    >
+                      <HeartIcon className="size-12 rounded-md flex-shrink-0 object-cover bg-pink-600 p-2 text-white" />
+                      <div className="flex-1 min-w-0 hidden md:block">
+                        <p className="font-medium truncate">Favorite Songs</p>
+                        <p className="text-sm text-zinc-400 truncate">
+                          Favorite Songs
+                        </p>
+                      </div>
+                    </Link>
+                  )}
+                  {/* Render user albums */}
                   {myAlbums.map((album) => (
                     <Link
                       to={`/albums/${album.id}`}
@@ -105,45 +121,6 @@ const LeftSidebar = () => {
                       </div>
                     </Link>
                   ))}
-
-                  {/* Favorite Songs Section with toggle */}
-                  {favoriteSongs.length > 0 && (
-                    <div className="mt-6">
-                      <button
-                        className="flex items-center text-white px-2 mb-2 w-full focus:outline-none"
-                        onClick={() => setShowFavorites((prev) => !prev)}
-                      >
-                        <HeartIcon className="size-5 mr-2" />
-                        <span className="hidden md:inline">Favorite Songs</span>
-                        <span className="ml-auto text-xs text-zinc-400">
-                          {showFavorites ? <ArrowUp size={16}/> : <ArrowDown size={16}/>}
-                        </span>
-                      </button>
-                      {showFavorites && (
-                        <div className="space-y-2">
-                          {favoriteSongs.map((song) => (
-                            <div
-                              key={song.id}
-                              className="p-2 hover:bg-zinc-900 rounded-md flex items-center gap-3 group cursor-pointer relative"
-                            >
-                              <img
-                                src={song.image_url}
-                                alt={song.title}
-                                className="size-10 rounded-md flex-shrink-0 object-cover"
-                              />
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium truncate">{song.title}</p>
-                                <p className="text-sm text-zinc-400 truncate">
-                                  {song.artist}
-                                </p>
-                              </div>
-                              <PlayButton song={song} />
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </>
               )}
             </div>
