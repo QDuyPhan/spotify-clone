@@ -56,7 +56,7 @@ const AddSongDialog = () => {
 
     setIsLoading(true);
     try {
-      await axiosInstance.post("/songs/user-albums/add-song/", {
+      await axiosInstance.post("songs/user-albums/add-song/", {
         song_id: selectedSongId,
         album_id: selectedAlbumId,
       });

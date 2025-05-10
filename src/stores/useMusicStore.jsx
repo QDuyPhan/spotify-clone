@@ -54,7 +54,7 @@ export const useMusicStore = create((set, get) => ({
   fetchMyAlbums: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get("/albums/user/");
+      const response = await axiosInstance.get("albums/user/");
       set({ myAlbums: response.data });
     } catch (error) {
       set({
@@ -72,7 +72,7 @@ export const useMusicStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.delete(`/songs/${id}/delete/`);
-      
+
       if (response.data.message === "Song deleted successfully") {
         set((state) => ({
           songs: state.songs.filter((song) => song.id !== id),
@@ -80,7 +80,8 @@ export const useMusicStore = create((set, get) => ({
         toast.success("Song deleted successfully");
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || "Failed to delete song";
+      const errorMessage =
+        error.response?.data?.error || "Failed to delete song";
       if (error.response?.status === 403) {
         toast.error("You do not have permission to delete this song");
       } else {
@@ -94,7 +95,7 @@ export const useMusicStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axiosInstance.delete(`/albums/${id}/delete/`);
-      
+
       if (response.data.deleted_album_id) {
         set((state) => ({
           albums: state.albums.filter((album) => album.id !== id),
@@ -103,7 +104,10 @@ export const useMusicStore = create((set, get) => ({
         toast.success("Album and associated songs deleted successfully");
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || error.response?.data?.details || "Failed to delete album";
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.details ||
+        "Failed to delete album";
       toast.error(errorMessage);
     } finally {
       set({ isLoading: false });
@@ -112,7 +116,7 @@ export const useMusicStore = create((set, get) => ({
   fetchSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get("/songs");
+      const response = await axiosInstance.get("songs/");
       set({ songs: response.data });
     } catch (error) {
       set({ error: error.message });
@@ -123,7 +127,7 @@ export const useMusicStore = create((set, get) => ({
   fetchStats: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get("/stats");
+      const response = await axiosInstance.get("stats/");
       set({ stats: response.data });
     } catch (error) {
       set({ error: error.message });
@@ -138,7 +142,7 @@ export const useMusicStore = create((set, get) => ({
       error: null,
     });
     try {
-      const response = await axiosInstance.get("/albums");
+      const response = await axiosInstance.get("albums/");
       set({ albums: response.data });
     } catch (error) {
       set({ error: error.response?.data?.message || "Something went wrong" });
@@ -164,7 +168,7 @@ export const useMusicStore = create((set, get) => ({
   fetchFeaturedSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get("/songs/featured");
+      const response = await axiosInstance.get("songs/featured/");
       set({ featureSongs: response.data });
     } catch (error) {
       set({ error: error.response.data.message });
@@ -176,7 +180,7 @@ export const useMusicStore = create((set, get) => ({
   fetchMadeForYouSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get("/songs/made-for-you");
+      const response = await axiosInstance.get("songs/made-for-you/");
       set({ madeForYouSongs: response.data });
     } catch (error) {
       set({ error: error.response.data.message });
@@ -188,7 +192,7 @@ export const useMusicStore = create((set, get) => ({
   fetchTrendingSongs: async () => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axiosInstance.get("/songs/trending");
+      const response = await axiosInstance.get("songs/trending/");
       set({ trendingSongs: response.data });
     } catch (error) {
       set({ error: error.response.data.message });
@@ -219,9 +223,13 @@ export const useMusicStore = create((set, get) => ({
     const isFavorite = state.favoriteSongs.some((song) => song.id === songId);
     try {
       if (isFavorite) {
-        await axiosInstance.delete("/songs/favorite/", { data: { song_id: songId } });
+        await axiosInstance.delete("/songs/favorite/", {
+          data: { song_id: songId },
+        });
         set({
-          favoriteSongs: state.favoriteSongs.filter((song) => song.id !== songId),
+          favoriteSongs: state.favoriteSongs.filter(
+            (song) => song.id !== songId
+          ),
         });
         toast.success("Đã xóa khỏi yêu thích");
       } else {
@@ -241,10 +249,13 @@ export const useMusicStore = create((set, get) => ({
 
   fetchFavoriteSongs: async () => {
     try {
-      const response = await axiosInstance.get("/songs/favorite/list/");
+      const response = await axiosInstance.get("songs/favorite/list/");
       set({ favoriteSongs: response.data });
     } catch (error) {
-      toast.error("Không thể lấy danh sách yêu thích");
+      toast.error(
+        "Không thể lấy danh sách yêu thích: ",
+        error.response?.data?.error
+      );
     }
   },
 }));
