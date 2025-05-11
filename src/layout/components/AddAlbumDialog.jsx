@@ -16,11 +16,8 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 /**
- * Component for displaying a dialog that allows the user to add a new album.
- * It supports image upload and input fields for album title, artist, and release year.
- *
  * @component
- * @returns {JSX.Element} A dialog form for adding a new album.
+ * @returns {JSX.Element}
  */
 const AddAlbumDialog = () => {
   const [albumDialogOpen, setAlbumDialogOpen] = useState(false);

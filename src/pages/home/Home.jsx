@@ -9,7 +9,7 @@ import { Play, Pause } from "lucide-react";
 
 const Home = () => {
   const {
-    fetchFeaturedSongs, // <-- sửa lại đúng tên hàm
+    fetchFeaturedSongs, 
     fetchMadeForYouSongs,
     fetchTrendingSongs,
     isLoading,

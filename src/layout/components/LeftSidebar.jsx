@@ -30,8 +30,8 @@ const LeftSidebar = () => {
     fetchFavoriteSongs();
   }, [fetchAlbums, fetchMyAlbums, fetchFavoriteSongs]);
 
-  console.log("myAlbums: ", myAlbums);
-  console.log("favoriteSongs: ", favoriteSongs);
+  // console.log("myAlbums: ", myAlbums);
+  // console.log("favoriteSongs: ", favoriteSongs);
 
   return (
     <div className="h-full flex flex-col gap-2">

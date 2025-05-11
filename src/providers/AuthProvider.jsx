@@ -19,7 +19,7 @@ const updateApiToken = (token) => {
 const AuthProvider = ({ children }) => {
   const { getToken, userId } = useAuth();
   const [loading, setLoading] = useState(true);
-  const { checkAdminStatus } = useAuthStore();
+ const {checkAdminStatus } = useAuthStore()
 
   useEffect(() => {
     const initAuth = async () => {

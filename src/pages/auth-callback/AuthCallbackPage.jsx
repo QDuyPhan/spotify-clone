@@ -6,6 +6,7 @@ import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthCallbackPage = () => {
+  // lấy thông tin người dùng khi đăng nhập
   const { isLoaded, user } = useUser();
   const navigate = useNavigate();
   const syncAttempted = useRef(false);
@@ -22,7 +23,7 @@ const AuthCallbackPage = () => {
           imageUrl: user.imageUrl,
           email: user.primaryEmailAddress.emailAddress,
         });
-        console.log("Email:", user.primaryEmailAddress.emailAddress);
+        // console.log("Email:", user.primaryEmailAddress.emailAddress);
       } catch (error) {
         console.error(
           "Error in auth callback:",

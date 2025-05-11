@@ -6,7 +6,6 @@ const AudioPlayer = () => {
   const audioRef = useRef(null);
   const prevSongRef = useRef(null);
   const { currentSong, isPlaying, playNext } = usePlayerStore();
-  console.log("Audio src:", currentSong?.audio_url);
 
   // handle play/pause logic
   useEffect(() => {
